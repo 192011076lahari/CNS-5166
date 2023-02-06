@@ -1,0 +1,33 @@
+#include <string.h>
+#include "blowfish.h"
+#include "bf_pi.h"
+#include "bf_locl.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+ {
+    char from[128], to[128];
+    int len = 128;
+    BF_KEY key;
+    char temp_buf[16];
+    int n = 0;          /* internal blowfish variables */
+    unsigned char iv[8];        /* Initialization Vector */
+    /* fill the IV with zeros (or any other fixed data) */
+    memset(iv, 0, 8);
+
+
+    printf("input password: ");
+    scanf("%s", &temp_buf);
+
+    strcpy(from, "ABCDEFGHTHISISTHEDATA"); //ENCRYPT THIS
+
+    BF_set_key(&key, 16, temp_buf);
+
+    BF_cfb64_encrypt(from, to, len, &key, iv, &n, BF_ENCRYPT);
+    printf("encrypted to -->  %s\n", to); //SUCCESSFULY ENCRYPTED
+
+
+    BF_cfb64_encrypt(from, to, len, &key, iv, &n, BF_DECRYPT);
+    printf("File %s has been decrypted to --> %s \n",from,  to); //FAILS DOES NOT DECRYPT
+}
